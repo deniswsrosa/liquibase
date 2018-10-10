@@ -1,4 +1,4 @@
-package liquibase.changelog.annotations;
+package liquibase.parser.core.java;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

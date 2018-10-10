@@ -1,8 +1,8 @@
 package liquibase.changelog.annotations.reader;
 
 
-import liquibase.changelog.annotations.ChangeLog;
-import liquibase.changelog.annotations.ChangeSet;
+import liquibase.parser.core.java.ChangeLog;
+import liquibase.parser.core.java.ChangeSet;
 import liquibase.exception.LiquibaseParseException;
 import org.reflections.Reflections;
 import org.springframework.context.annotation.Profile;

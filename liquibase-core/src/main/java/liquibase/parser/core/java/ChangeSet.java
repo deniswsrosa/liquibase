@@ -1,4 +1,4 @@
-package liquibase.changelog.annotations;
+package liquibase.parser.core.java;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -36,7 +36,7 @@ public @interface ChangeSet {
      *
      * @return ordering
      */
-    String order();   // must be set
+    int order();   // must be set
 
     /**
      * Executes the change set on every liquibase execution, even if it has been run before.
@@ -50,13 +50,13 @@ public @interface ChangeSet {
     /**
      * If set to true, the changeSet will be ignored (skipped)
      */
-    String ignore() default "false";
+    boolean ignore() default false;
 
 
     /**
      * If false, do not stop liquibase update execution if an error is thrown executing the changeSet.  Defaults to true
      */
-    String failOnError() default "true";
+    boolean failOnError() default true;
 
 
     /**

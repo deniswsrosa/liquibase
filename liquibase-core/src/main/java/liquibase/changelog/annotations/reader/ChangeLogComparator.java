@@ -1,7 +1,7 @@
 package liquibase.changelog.annotations.reader;
 
 
-import liquibase.changelog.annotations.ChangeLog;
+import liquibase.parser.core.java.ChangeLog;
 
 import java.io.Serializable;
 import java.util.Comparator;

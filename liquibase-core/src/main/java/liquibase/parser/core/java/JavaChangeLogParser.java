@@ -4,11 +4,13 @@ import liquibase.Scope;
 import liquibase.change.Change;
 import liquibase.changelog.ChangeLogParameters;
 import liquibase.changelog.DatabaseChangeLog;
+import liquibase.changelog.annotations.reader.ChangeSetComparator;
 import liquibase.exception.ChangeLogParseException;
 import liquibase.parser.ChangeLogParser;
 import liquibase.resource.ResourceAccessor;
 
 import java.lang.reflect.Method;
+import java.util.*;
 
 public class JavaChangeLogParser implements ChangeLogParser {
 
@@ -19,6 +21,7 @@ public class JavaChangeLogParser implements ChangeLogParser {
             Object changeLogInstance = changeLogClass.newInstance();
 
             DatabaseChangeLog changelog = new DatabaseChangeLog(physicalChangeLogLocation);
+            List<ChangeSet> annotations = new ArrayList<>();
 
             for (Method method : changeLogClass.getMethods()) {
                 ChangeSet changeSetAnnotation = method.getAnnotation(ChangeSet.class);
@@ -28,6 +31,7 @@ public class JavaChangeLogParser implements ChangeLogParser {
                     boolean runAlways = changeSetAnnotation.runAlways();
 
                     liquibase.changelog.ChangeSet changeSet = new liquibase.changelog.ChangeSet(id, author, runAlways, false, physicalChangeLogLocation, null, null, changelog);
+                    changeSet.setRunOrder(String.valueOf(changeSetAnnotation.order()));
 
                     if (method.getReturnType().equals(void.class)) {
                         changeSet.addChange(new JavaChange(method, changeLogInstance));
@@ -42,6 +46,7 @@ public class JavaChangeLogParser implements ChangeLogParser {
                     changelog.addChangeSet(changeSet);
                 }
             }
+            changelog.getChangeSets().sort(Comparator.comparing(o -> Integer.valueOf(o.getRunOrder())));
 
             return changelog;
         } catch (Throwable e) {
@@ -58,4 +63,5 @@ public class JavaChangeLogParser implements ChangeLogParser {
     public int getPriority() {
         return 0;
     }
+
 }
